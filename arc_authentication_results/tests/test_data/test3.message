@@ -1,0 +1,38 @@
+Return-Path: <19.riju@gmail.com>
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com;
+       spf=pass (google.com: domain of 19.riju@gmail.com designates 2a00:1450:4010:c07::22b as permitted sender) smtp.mailfrom=19.riju@gmail.com;
+       dmarc=pass (p=NONE dis=NONE) header.from=gmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20120113;
+        h=mime-version:date:message-id:subject:from:to;
+        bh=mgrwKwdcA3hNILTSm9gkD7pVAryyYfrYx8Al0AbrTW8=;
+        b=R2vfpJrIHpXvmsMyKP6EIbbIWMMss7ruN7QA9anWjnPFmQAMVQAyAv5c5dxkVwFzAy
+         bLMeZS7A8jEfkMz7fOKQDxCsBFip2InxA3rTAtVyINE8xXuoUV1J6OsUX6sQH7vHhXVv
+         efNAkMbNdL1719/vLcRCL21+Fx1bn0kzPndMNWy3SSzlRDx5PKIl1Kj+BtvbrYZE/5Un
+         sHgYAr/bco9txY84RiZNp0bRewG6PHph2//2H3iMFkiPbupeyUGuSv9/04MOGjt889Sr
+         VBUo4LUTn+SEqYT3Hf0K9icHUv1a6XqVJ8RJkTduaC4gQYRBmYoFfywQ6V/bZ+r4T5YF
+         f4SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20130820;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=mgrwKwdcA3hNILTSm9gkD7pVAryyYfrYx8Al0AbrTW8=;
+        b=Ko3XO8ahDfxomHc4edJvoGW9jvauhhJu37sSGee7h7NIgzW+5Q+WgkNwN3my+SXO9Y
+         QqqpPkiqiEb2eUkwaEjfzL8ne8CHf2eQYzo7R9w/DgOePZU4g1rP/Xw+VbTaDExv3JDV
+         Gr1OC2Yu8ZTROSCyhFgK91v7Lp7qMq1B9fkyLez6JIrn3b/0WWjPXR2UKFBS6EQmFk6+
+         Q5AmDRPMIPFP7wdIN1Y5T2Iz/y9anAbpprNwJ+qDWpuTYiJAPgMfJTiA8yMYoVQSS2en
+         h7JJX8kk58LQ3gRm5uYjo3JrxeXwqpEMRyebjjUDlZ9BmLxzlAiprcOLZ/vi38Vo1eFe
+         tS+Q==
+X-Gm-Message-State: AOPr4FXD6rE9bBgr+43PZFr3arSSsu8O+hX8XuN2+gxU916qppbx8Zf888U8E0k6a/+oerraS8+PFfzt7MU2/g==
+MIME-Version: 1.0
+X-Received: by 10.25.91.207 with SMTP id p198mr763782lfb.142.1462951130722;
+ Wed, 11 May 2016 00:18:50 -0700 (PDT)
+Received: by 10.112.222.226 with HTTP; Wed, 11 May 2016 00:18:50 -0700 (PDT)
+Date: Wed, 11 May 2016 12:48:50 +0530
+Message-ID: <CACVUcHAQsof1DiVaaH6htM_i3t90WCTPp5+Af55eTzuJ73H_Ng@mail.gmail.com>
+Subject: scratch map 2
+From: Riju Khatri <19.riju@gmail.com>
+To: Aditya Divekar <adityadivekar03@gmail.com>
+Content-Type: multipart/alternative; boundary=001a1140c520787d0c05328bdaf4
+
+Hi
