@@ -1,0 +1,11 @@
+image: maxking/mailman-ci-runner
+
+before_script:
+  - pip install https://gitlab.com/adityadivekar/sign-message/repository/archive.zip?ref=master
+  - pip install pyspf emailprotectionslib==0.4 pytest enum pydns ipaddr dnslib dnspython
+
+test:
+  script:
+  - python2.7 -m py.test arc_authentication_results
+  - python2.7 -m py.test arc_message_signature
+  - python2.7 -m py.test arc_seal
