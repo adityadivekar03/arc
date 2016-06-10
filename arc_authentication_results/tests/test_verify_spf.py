@@ -17,11 +17,11 @@ class TestSPF(unittest.TestCase):
 		self.msg = open(abs_path).read()
 
 	def test_bad_mail_spf(self):
-		self.get_file('test4.message')
+		self.get_file('temp4.message')
 		res = verify_spf.spfverify(self.msg)
 		self.assertEqual(res, 'fail')
 
 	def test_good_mail_spf(self):
-		self.get_file('test5.message')
+		self.get_file('temp5.message')
 		res = verify_spf.spfverify(self.msg)
 		self.assertTrue(res, 'pass')

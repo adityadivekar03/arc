@@ -26,7 +26,7 @@ class TestAAR(unittest.TestCase):
 
 		_dns_responses = {
 	          'google._domainkey.canonical.com.': sample_dns,
-	          'test._domainkey.example.com.': self.get_file('test.txt'),
+	          'test._domainkey.example.com.': self.get_file('temp.txt'),
 	          '20120113._domainkey.gmail.com.': """k=rsa; \
 	p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1Kd87/UeJjenpabgbFwh\
 	+eBCsSTrqmwIYYvywlbhbqoo2DymndFkbjOVIPIldNs/m40KF+yzMn1skyoxcTUGCQ\
@@ -54,14 +54,14 @@ class TestAAR(unittest.TestCase):
 
 	def test_aar_instance(self):
 		# Test when no previous instance of AAR is present.
-		self.msg = self.get_file('test1.message')
+		self.msg = self.get_file('temp1.message')
 		obj = aar.AAR(self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc, True)
 		tag = dkim.parse_tag_value(sig[1])
 		instance = tag[b'i']
 		self.assertEqual(instance , '1')
 		# Test when previous instance of AAR is present.
-		self.msg = self.get_file('test2.message')
+		self.msg = self.get_file('temp2.message')
 		obj = aar.AAR(self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc, True)
 		tag = dkim.parse_tag_value(sig[1])
@@ -70,7 +70,7 @@ class TestAAR(unittest.TestCase):
 
 	def test_dkim_and_dmarc_fail(self):
 		# No alignment mode specified.
-		self.msg = self.get_file('test3.message')
+		self.msg = self.get_file('temp3.message')
 		obj = aar.AAR(self.msg)
 		sig = obj.create_aar(testing=True)
 		tag = dkim.parse_tag_value(sig[1])
@@ -81,8 +81,8 @@ class TestAAR(unittest.TestCase):
 
 	def test_dkim_and_dmarc_pass(self):
 		# No alignment mode specified.
-		self.msg = self.get_file('test1.message')
-		key = self.get_file('test.private')
+		self.msg = self.get_file('temp1.message')
+		key = self.get_file('temp.private')
 		sign = dkim.sign(self.msg, b"test", b"example.com", key)
 		obj = aar.AAR(sign+self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc,True)
@@ -96,8 +96,8 @@ class TestAAR(unittest.TestCase):
 		# The d_equal_domain is 'example.com', but
 		# the RFC5322.FROM domain is 'p.example.com'.
 		# Hence dmarc fails due to 'strict' alignment rule.
-		self.msg = self.get_file('test6.message')
-		key = self.get_file('test.private')
+		self.msg = self.get_file('temp6.message')
+		key = self.get_file('temp.private')
 		sign = dkim.sign(self.msg, b"test", b"example.com", key)
 		obj = aar.AAR(sign+self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc, True)
@@ -111,8 +111,8 @@ class TestAAR(unittest.TestCase):
 		# The d_equal_domain is 'example.com', but
 		# the RFC5322.FROM domain is 'p.example.com'.
 		# Hence dmarc passes due to 'relaxed' alignment rule.
-		self.msg = self.get_file('test7.message')
-		key = self.get_file('test.private')
+		self.msg = self.get_file('temp7.message')
+		key = self.get_file('temp.private')
 		sign = dkim.sign(self.msg, b"test", b"example.com", key)
 		obj = aar.AAR(sign+self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc, True)

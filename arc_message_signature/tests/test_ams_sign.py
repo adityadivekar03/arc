@@ -19,8 +19,8 @@ class TestAMS(unittest.TestCase):
 	"""Test AMS"""
 	
 	def setUp(self):
-		self.msg = self.get_file('test.message')
-		self.key = self.get_file('test.private')
+		self.msg = self.get_file('temp.message')
+		self.key = self.get_file('temp.private')
 		self.obj = ams_sign.AMS(self.msg)
 
 	def get_file(self, filename):
@@ -37,7 +37,7 @@ class TestAMS(unittest.TestCase):
 
 		_dns_responses = {
 	          'example._domainkey.canonical.com.': sample_dns,
-	          'test._domainkey.example.com.': self.get_file('test.txt'),
+	          'test._domainkey.example.com.': self.get_file('temp.txt'),
 	          '20120113._domainkey.gmail.com.': """k=rsa; \
 	p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1Kd87/UeJjenpabgbFwh\
 	+eBCsSTrqmwIYYvywlbhbqoo2DymndFkbjOVIPIldNs/m40KF+yzMn1skyoxcTUGCQ\
@@ -68,8 +68,8 @@ class TestAMS(unittest.TestCase):
 
 	def test_instance_one(self):
 		# A message having AAR prepended to it.
-		msg = self.get_file('test2.message')
-		key = self.get_file('test.private')
+		msg = self.get_file('temp2.message')
+		key = self.get_file('temp.private')
 		obj = ams_sign.AMS(msg)
 		sig = obj.sign(selector = b"test", domain = b"example.com", privkey=key)
 		res = obj.verify(message = sig+msg, dnsfunc = self.dnsfunc)

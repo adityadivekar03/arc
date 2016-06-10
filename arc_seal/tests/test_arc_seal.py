@@ -9,8 +9,8 @@ from arc_seal import arc_seal_sign
 class TestASeal(unittest.TestCase):
 
 	def setUp(self):
-		self.msg = self.get_file('temp2.message')
-		self.key = self.get_file('test.private')
+		self.msg = self.get_file('temp0.message')
+		self.key = self.get_file('temp.private')
 		self.obj = arc_seal_sign.ASeal(self.msg)
 
 	def get_file(self, filename):
@@ -27,7 +27,7 @@ class TestASeal(unittest.TestCase):
 
 		_dns_responses = {
 	          'example._domainkey.canonical.com.': sample_dns,
-	          'test._domainkey.example.com.': self.get_file('test.txt'),
+	          'test._domainkey.example.com.': self.get_file('temp.txt'),
 	          '20120113._domainkey.gmail.com.': """k=rsa; \
 	p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA1Kd87/UeJjenpabgbFwh\
 	+eBCsSTrqmwIYYvywlbhbqoo2DymndFkbjOVIPIldNs/m40KF+yzMn1skyoxcTUGCQ\
@@ -48,10 +48,10 @@ class TestASeal(unittest.TestCase):
 		headers, body = dkim.rfc822_parse(sig+self.msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'pass')
+		self.assertEquals(tag_val[b'cv'], 'none')
 
 	def test_tampered_arc_seal_breaks_chain(self):
-		msg = self.get_file('temp.message')
+		msg = self.get_file('temp1.message')
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
 		headers, body = dkim.rfc822_parse(sig+msg)
@@ -60,7 +60,25 @@ class TestASeal(unittest.TestCase):
 		self.assertEquals(tag_val[b'cv'], 'fail')
 
 	def test_chain_length_two(self):
+		msg = self.get_file('temp2.message')
+		obj = arc_seal_sign.ASeal(msg)
+		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
+		headers, body = dkim.rfc822_parse(sig+msg)
+		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
+		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
+		self.assertEquals(tag_val[b'cv'], 'pass')
+
+	def test_chain_length_three(self):
 		msg = self.get_file('temp3.message')
+		obj = arc_seal_sign.ASeal(msg)
+		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
+		headers, body = dkim.rfc822_parse(sig+msg)
+		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
+		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
+		self.assertEquals(tag_val[b'cv'], 'pass')
+
+	def test_chain_length_four(self):
+		msg = self.get_file('temp4.message')
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
 		headers, body = dkim.rfc822_parse(sig+msg)

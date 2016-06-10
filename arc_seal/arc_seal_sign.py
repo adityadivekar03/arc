@@ -1,4 +1,5 @@
 import dkim
+from arc_message_signature import ams_sign
 
 from dkim.types import Signature
 from dkim.dnsplug import get_txt
@@ -25,13 +26,15 @@ class ASeal(object):
 			cv = 'none'
 		else:
 			try:
-				(self.obj).verify(message=self.message, sign_type=Signature.ams,dnsfunc=dnsfunc)
+				if not (self.obj).verify(message=self.message, idx=1, sign_type=Signature.ams,dnsfunc=dnsfunc):
+					raise
 			except Exception:
 				cv = 'fail'
 			if cv != 'fail':
-				for i in (1, len(sigheaders)):
+				instances = len(sigheaders)
+				for i in (1, instances):
 					sig = dkim.util.parse_tag_value(sigheaders[i-1][1])
-					if (i>1 and sig['cv']=='pass' or i==1 and sig['cv']=='none'):
+					if (i<instances and sig['cv']=='pass' or i==instances and sig['cv']=='none'):
 						if (self.obj).verify(message=self.message,idx=i-1,sign_type=Signature.aseal,dnsfunc=dnsfunc):
 							cv = 'pass'
 							continue
