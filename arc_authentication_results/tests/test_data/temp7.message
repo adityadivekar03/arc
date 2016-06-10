@@ -1,0 +1,15 @@
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=example.com; i=@example.com; 
+ q=dns/txt; s=test; t=1464079825; h=Message-ID : Date : From : To : 
+ Subject : Date : From : Subject; 
+ bh=wE7NXSkgnx9PGiavN4OZhJztvkqPDlemV3OGuEnLwNo=; 
+ b=U/M3Ry+OeFMxvg2uK4huG9NUcSiPGkGdDY8R3GoI1ZI0w3FhFkAuLkS8Z9n9J6ziSd+lu4
+ l6cVOYPKIanJW67/bCuG9KzZAUw1MR3RoC8gNY0zDNRqdjGlNj6mlOYdxFPhim9/r7TfOxf+
+ T2mG+prEo/DNnbodrEE5m3mk8PeSo=
+Received: from localhost
+Message-ID: <example@f.example.com>
+Date: Mon, 01 Jan 2011 01:02:03 +0400
+From: Test User <test@f.example.com>
+To: somebody@f.example.com
+Subject: Testing
+
+This is a test message.

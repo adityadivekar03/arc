@@ -1,16 +1,13 @@
-ARC-Message-Signature: i=1; a=rsa-sha256; d=example.com; s=test; t=1464978524; h=sender : 
- reply-to : subject : from : date : message-id : to : cc : mime-version 
- : content-type : content-transfer-encoding : content-id : content- 
- description : resent-date : resent-from : resent-sender : resent-to : 
- resent-cc : resent-message-id : in-reply-to : references : list-id : 
- list-help : list-unsubscribe : list-subscribe : list-post : list-owner 
- : list-archive; bh=wE7NXSkgnx9PGiavN4OZhJztvkqPDlemV3OGuEnLwNo=; 
- b=FZK/QoWWmXAG36tto0WunPM5y/6JvY/A/Y6fpubQb/qrlVdG6lZHRzKN10rYWCZFY7zHLq
- /sxB9kL6lGgpWDHaemevQV54plACMCbyNL0mRswYAixMQWQP304CkVPHCT/SEtLX6APzAAAW
- 5WSKg6H7kLBUzzG16ckogWAwOEmoQ=
-ARC-Authentication-Results: i=1; 
- dkim=pass; 
- dmarc=pass;
+ARC-Seal: i=2;
+ARC-Message-Signature: i=2;
+ARC-Authentication-Results: i=2;
+ARC-Seal: i=1;
+ARC-Message-Signature: i=1;
+ARC-Authentication-Results: i=1;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@mg.gitlab.com;
+       dkim=pass header.i=@mailgun.org;
+       spf=pass (google.com: domain of bounce+ff9b4d.947b4-adityadivekar03=gmail.com@mg.gitlab.com designates 198.61.254.240 as permitted
 Received: from localhost
 Message-ID: <example@example.com>
 Date: Mon, 01 Jan 2011 01:02:03 +0400
@@ -19,3 +16,4 @@ To: somebody@example.com
 Subject: Testing
 
 This is a test message.
+Hi There!
