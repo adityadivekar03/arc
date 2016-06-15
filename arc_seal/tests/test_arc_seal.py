@@ -85,3 +85,27 @@ class TestASeal(unittest.TestCase):
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
 		self.assertEquals(tag_val[b'cv'], 'pass')
+
+	def test_adding_unsigned_headers_verifies(self):
+		msg = self.get_file('temp4.message')
+		h, b = msg.split(b'\n\n', 1)
+		h1 = h + b'\r\n'+b'Foo: Bar'
+		msg = b'\n\n'.join((h1,b))
+		obj = arc_seal_sign.ASeal(msg)
+		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
+		headers, body = dkim.rfc822_parse(sig+msg)
+		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
+		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
+		self.assertEquals(tag_val[b'cv'], 'pass')
+
+	def test_adding_signed_headers_unverifies(self):
+		msg = self.get_file('temp4.message')
+		h, b = msg.split(b'\n\n', 1)
+		h1 = h + b'\r\n'+b'ARC-Authentication-Results: i=3;'
+		msg = b'\n\n'.join((h1,b))
+		obj = arc_seal_sign.ASeal(msg)
+		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
+		headers, body = dkim.rfc822_parse(sig+msg)
+		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
+		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
+		self.assertEquals(tag_val[b'cv'], 'fail')
