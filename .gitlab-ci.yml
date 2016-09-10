@@ -3,7 +3,8 @@ image: maxking/mailman-ci-runner
 before_script:
   - pip install https://gitlab.com/adityadivekar/sign-message/repository/archive.zip?ref=master
   - pip install ipaddress
-  - pip install pyspf emailprotectionslib==0.4 pytest enum34 py3dns dnslib dnspython
+  - pip install https://gitlab.com/adityadivekar/py3dns-encoded/repository/archive.zip?ref=master
+  - pip install pyspf emailprotectionslib==0.4 pytest enum34 dnslib dnspython
 
 test:
   script:
