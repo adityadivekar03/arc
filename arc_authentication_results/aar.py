@@ -24,7 +24,7 @@ import email
 import re
 import spf
 
-from verify_dmarc import Dmarc
+from arc_authentication_results.verify_dmarc import Dmarc
 from dkim.types import Signature
 
 
