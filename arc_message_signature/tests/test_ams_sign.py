@@ -76,7 +76,7 @@ class TestAMS(unittest.TestCase):
 	def test_sign_and_verify(self):
 		obj = ams_sign.AMS(self.msg)
 		sig = obj.sign(selector = b"test", domain = b"example.com", privkey=self.key)
-		res = obj.verify(message = sig+self.msg, dnsfunc = self.dnsfunc)
+		res = obj.verify(message = sig.decode('utf-8')+self.msg, dnsfunc = self.dnsfunc)
 		self.assertTrue(res)
 
 	def test_break_bodyhash(self):
@@ -85,7 +85,7 @@ class TestAMS(unittest.TestCase):
 		sig = obj.sign(selector = b"test", domain = b"example.com", privkey=self.key)
 		# Add foreign character to body to break bodyhash
 		with self.assertRaises(dkim.ValidationError):
-			obj.verify(message = sig+self.msg+"b", dnsfunc = self.dnsfunc)
+			obj.verify(message = sig.decode('utf-8')+self.msg+"b", dnsfunc = self.dnsfunc)
 
 	def test_instance_one(self):
 		# A message having AAR prepended to it.
@@ -93,29 +93,29 @@ class TestAMS(unittest.TestCase):
 		key = self.get_file('temp.private')
 		obj = ams_sign.AMS(msg)
 		sig = obj.sign(selector = b"test", domain = b"example.com", privkey=key)
-		res = obj.verify(message = sig+msg, dnsfunc = self.dnsfunc)
+		res = obj.verify(message = sig.decode('utf-8')+msg, dnsfunc = self.dnsfunc)
 		self.assertTrue(res)
-		self.headers, self.body = dkim.rfc822_parse(sig+msg)
+		self.headers, self.body = dkim.rfc822_parse(sig.decode('utf-8')+msg)
 		self.sigheaders = [(x,y) for x,y in self.headers if x.lower() == b"arc-message-signature"]
 		tag_val = dkim.util.parse_tag_value(self.sigheaders[0][1])
-		self.assertEquals(tag_val[b'i'], '1')
+		self.assertEquals(tag_val[b'i'], b'1')
 
 	def test_adding_unsigned_header_still_verifies(self):
 		obj = ams_sign.AMS(self.msg)
 		sig = obj.sign(selector = b"test", domain = b"example.com", privkey=self.key)
-		h, b = self.msg.split(b'\n\n', 1)
-		h1 = h + b'\r\n'+b'Foo: Bar'
-		msg = b'\n\n'.join((h1,b))
-		res = obj.verify(message = sig+msg, dnsfunc = self.dnsfunc)
+		h, b = self.msg.split('\n\n', 1)
+		h1 = h + '\r\n'+'Foo: Bar'
+		msg = '\n\n'.join((h1,b))
+		res = obj.verify(message = sig.decode('utf-8')+msg, dnsfunc = self.dnsfunc)
 		self.assertTrue(res)
 
 	def test_adding_signed_header_breaks_sign(self):
 		obj = ams_sign.AMS(self.msg)
 		sig = obj.sign(selector = b"test", domain = b"example.com", privkey=self.key)
-		h, b = self.msg.split(b'\n\n', 1)
-		h1 = h + b'\r\n'+b'From: Foo'
-		msg = b'\n\n'.join((h1,b))
-		res = obj.verify(message = sig+msg, dnsfunc = self.dnsfunc)
+		h, b = self.msg.split('\n\n', 1)
+		h1 = h + '\r\n'+'From: Foo'
+		msg = '\n\n'.join((h1,b))
+		res = obj.verify(message = sig.decode('utf-8')+msg, dnsfunc = self.dnsfunc)
 		self.assertFalse(res)
 
 	def test_validate_signature_fields(self):
@@ -130,4 +130,4 @@ class TestAMS(unittest.TestCase):
 		b't': b'1299525798'}
 		with self.assertRaises(dkim.ValidationError) as ve:
 			dkim.validate_signature_fields(sig, sign_type=Signature.ams)
-		self.assertEquals('signature missing i=', str(ve.exception))
+		self.assertEquals("signature missing b'i'=", str(ve.exception))

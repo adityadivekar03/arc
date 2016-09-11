@@ -79,9 +79,9 @@ class AAR(object):
 		
 		# FIXME! Insert the name of the list in the AAR header.		
 		sigfields = [x for x in [
-			(b'i', str(self.i)),
-			(b'dkim', str(self.dkim)),
-			(b'dmarc', str(self.dmarc)),
+			(b'i', str.encode(str(self.i))),
+			(b'dkim', str.encode(str(self.dkim))),
+			(b'dmarc', str.encode(str(self.dmarc))),
         ] if x]
 
 		sig_value = dkim.fold(b"; ".join(b"=".join(x) for x in sigfields))

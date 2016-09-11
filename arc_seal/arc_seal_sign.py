@@ -55,7 +55,7 @@ class ASeal(object):
 				instances = len(sigheaders)
 				for i in (1, instances):
 					sig = dkim.util.parse_tag_value(sigheaders[i-1][1])
-					if (i<instances and sig['cv']=='pass' or i==instances and sig['cv']=='none'):
+					if (i<instances and sig[b'cv']==b'pass' or i==instances and sig[b'cv']==b'none'):
 						if (self.obj).verify(message=self.message,idx=i-1,sign_type=Signature.aseal,dnsfunc=dnsfunc):
 							cv = 'pass'
 							continue

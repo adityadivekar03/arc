@@ -66,67 +66,67 @@ class TestASeal(unittest.TestCase):
 
 	def test_seal_sign_and_verify(self):
 		sig = (self.obj).sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
-		headers, body = dkim.rfc822_parse(sig+self.msg)
+		headers, body = dkim.rfc822_parse(sig.decode('utf-8')+self.msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'none')
+		self.assertEquals(tag_val[b'cv'], b'none')
 
 	def test_tampered_arc_seal_breaks_chain(self):
 		msg = self.get_file('temp1.message')
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
-		headers, body = dkim.rfc822_parse(sig+msg)
+		headers, body = dkim.rfc822_parse(sig.decode('utf-8')+msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'fail')
+		self.assertEquals(tag_val[b'cv'], b'fail')
 
 	def test_chain_length_two(self):
 		msg = self.get_file('temp2.message')
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
-		headers, body = dkim.rfc822_parse(sig+msg)
+		headers, body = dkim.rfc822_parse(sig.decode('utf-8')+msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'pass')
+		self.assertEquals(tag_val[b'cv'], b'pass')
 
 	def test_chain_length_three(self):
 		msg = self.get_file('temp3.message')
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
-		headers, body = dkim.rfc822_parse(sig+msg)
+		headers, body = dkim.rfc822_parse(sig.decode('utf-8')+msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'pass')
+		self.assertEquals(tag_val[b'cv'], b'pass')
 
 	def test_chain_length_four(self):
 		msg = self.get_file('temp4.message')
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
-		headers, body = dkim.rfc822_parse(sig+msg)
+		headers, body = dkim.rfc822_parse(sig.decode('utf-8')+msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'pass')
+		self.assertEquals(tag_val[b'cv'], b'pass')
 
 	def test_adding_unsigned_headers_verifies(self):
 		msg = self.get_file('temp4.message')
-		h, b = msg.split(b'\n\n', 1)
-		h1 = h + b'\r\n'+b'Foo: Bar'
-		msg = b'\n\n'.join((h1,b))
+		h, b = msg.split('\n\n', 1)
+		h1 = h + '\r\n'+'Foo: Bar'
+		msg = '\n\n'.join((h1,b))
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
-		headers, body = dkim.rfc822_parse(sig+msg)
+		headers, body = dkim.rfc822_parse(sig.decode('utf-8')+msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'pass')
+		self.assertEquals(tag_val[b'cv'], b'pass')
 
 	def test_adding_signed_headers_unverifies(self):
 		msg = self.get_file('temp4.message')
-		h, b = msg.split(b'\n\n', 1)
-		h1 = h + b'\r\n'+b'ARC-Authentication-Results: i=3;'
-		msg = b'\n\n'.join((h1,b))
+		h, b = msg.split('\n\n', 1)
+		h1 = h + '\r\n'+'ARC-Authentication-Results: i=3;'
+		msg = '\n\n'.join((h1,b))
 		obj = arc_seal_sign.ASeal(msg)
 		sig = obj.sign(selector=b"test", domain=b"example.com", privkey=self.key, dnsfunc=self.dnsfunc)
-		headers, body = dkim.rfc822_parse(sig+msg)
+		headers, body = dkim.rfc822_parse(sig.decode('utf-8')+msg)
 		sigheaders = [(x,y) for x,y in headers if x.lower() == b"arc-seal"]
 		tag_val = dkim.util.parse_tag_value(sigheaders[0][1])
-		self.assertEquals(tag_val[b'cv'], 'fail')
+		self.assertEquals(tag_val[b'cv'], b'fail')

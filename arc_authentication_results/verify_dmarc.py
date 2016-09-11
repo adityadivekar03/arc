@@ -76,7 +76,7 @@ class Dmarc(object):
 			else:
 				res = 'fail'
 		else:
-			if d_equal_domain in self.RFC_FROM_DOMAIN:
+			if d_equal_domain.decode('utf-8') in self.RFC_FROM_DOMAIN:
 				res = 'pass'
 			else:
 				res = 'fail'

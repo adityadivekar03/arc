@@ -80,14 +80,14 @@ class TestAAR(unittest.TestCase):
 		sig = obj.create_aar(self.dnsfunc, True)
 		tag = dkim.parse_tag_value(sig[1])
 		instance = tag[b'i']
-		self.assertEqual(instance , '1')
+		self.assertEqual(instance , b'1')
 		# Test when previous instance of AAR is present.
 		self.msg = self.get_file('temp2.message')
 		obj = aar.AAR(self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc, True)
 		tag = dkim.parse_tag_value(sig[1])
 		instance = tag[b'i']
-		self.assertEqual(instance , '2')
+		self.assertEqual(instance , b'2')
 
 	def test_dkim_and_dmarc_fail(self):
 		# No alignment mode specified.
@@ -96,22 +96,22 @@ class TestAAR(unittest.TestCase):
 		sig = obj.create_aar(testing=True)
 		tag = dkim.parse_tag_value(sig[1])
 		dkim_res = tag[b'dkim']
-		self.assertEqual(dkim_res, 'fail')
+		self.assertEqual(dkim_res, b'fail')
 		dmarc_res = tag[b'dmarc']
-		self.assertEqual(dmarc_res, 'fail')
+		self.assertEqual(dmarc_res, b'fail')
 
 	def test_dkim_and_dmarc_pass(self):
 		# No alignment mode specified.
 		self.msg = self.get_file('temp1.message')
 		key = self.get_file('temp.private')
 		sign = dkim.sign(self.msg, b"test", b"example.com", key)
-		obj = aar.AAR(sign+self.msg, self.dmarc_string_func)
+		obj = aar.AAR(sign.decode('utf-8')+self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc,True)
 		tag = dkim.parse_tag_value(sig[1])
 		dkim_res = tag[b'dkim']
-		self.assertEqual(dkim_res, 'pass')
+		self.assertEqual(dkim_res, b'pass')
 		dmarc_res = tag[b'dmarc']
-		self.assertEqual(dmarc_res, 'pass')
+		self.assertEqual(dmarc_res, b'pass')
 
 	def test_strict_alignment(self):
 		# The d_equal_domain is 'example.com', but
@@ -120,13 +120,13 @@ class TestAAR(unittest.TestCase):
 		self.msg = self.get_file('temp6.message')
 		key = self.get_file('temp.private')
 		sign = dkim.sign(self.msg, b"test", b"example.com", key)
-		obj = aar.AAR(sign+self.msg, self.dmarc_string_func)
+		obj = aar.AAR(sign.decode('utf-8')+self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc, True)
 		tag = dkim.parse_tag_value(sig[1])
 		dkim_res = tag[b'dkim']
-		self.assertEqual(dkim_res, 'pass')
+		self.assertEqual(dkim_res, b'pass')
 		dmarc_res = tag[b'dmarc']
-		self.assertEqual(dmarc_res, 'fail')
+		self.assertEqual(dmarc_res, b'fail')
 
 	def test_relaxed_alignment(self):
 		# The d_equal_domain is 'example.com', but
@@ -135,11 +135,11 @@ class TestAAR(unittest.TestCase):
 		self.msg = self.get_file('temp7.message')
 		key = self.get_file('temp.private')
 		sign = dkim.sign(self.msg, b"test", b"example.com", key)
-		obj = aar.AAR(sign+self.msg, self.dmarc_string_func)
+		obj = aar.AAR(sign.decode('utf-8')+self.msg, self.dmarc_string_func)
 		sig = obj.create_aar(self.dnsfunc, True)
 		tag = dkim.parse_tag_value(sig[1])
 		dkim_res = tag[b'dkim']
-		self.assertEqual(dkim_res, 'pass')
+		self.assertEqual(dkim_res, b'pass')
 		# So dmarc also fails.
 		dmarc_res = tag[b'dmarc']
-		self.assertEqual(dmarc_res, 'pass')
+		self.assertEqual(dmarc_res, b'pass')
