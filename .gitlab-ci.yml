@@ -8,6 +8,4 @@ before_script:
 
 test:
   script:
-  - python2.7 -m py.test arc_authentication_results
-  - python2.7 -m py.test arc_message_signature
-  - python2.7 -m py.test arc_seal
+  - py.test
