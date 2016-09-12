@@ -53,7 +53,10 @@ class AAR(object):
 	def create_aar(self, dnsfunc=None, testing=False):
 		sign_obj = dkim.DKIM(message = self.raw_msg)
 		try:
-			self.dkim = sign_obj.verify(dnsfunc=dnsfunc)
+			if dnsfunc:
+				self.dkim = sign_obj.verify(dnsfunc=dnsfunc)
+			else:
+				self.dkim = sign_obj.verify()
 			if self.dkim is True:
 				self.dkim = 'pass'
 			else:
